@@ -1,0 +1,204 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Candidate Ranking Report</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #333333;
+                margin: 0;
+                padding: 40px;
+            }
+            .container {
+                max-width: 1000px;
+                margin: auto;
+                background: #ffffff;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            }
+            h2 {
+                color: #1a73e8;
+                margin-top: 0;
+                font-size: 24px;
+                border-bottom: 2px solid #f1f3f4;
+                padding-bottom: 15px;
+            }
+            .job-card {
+                background-color: #f1f3f4;
+                border-left: 4px solid #1a73e8;
+                padding: 15px 20px;
+                border-radius: 6px;
+                margin-bottom: 25px;
+            }
+            .job-card h3 {
+                margin: 0 0 10px 0;
+                color: #202124;
+                font-size: 18px;
+            }
+            .job-card p {
+                margin: 5px 0;
+                font-size: 14px;
+                color: #444444;
+            }
+            .meta-info {
+                font-size: 14px;
+                color: #6c757d;
+                margin-bottom: 25px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #f1f3f4;
+                color: #202124;
+                font-weight: 600;
+                padding: 12px 16px;
+                border-bottom: 2px solid #dee2e6;
+            }
+            td {
+                padding: 14px 16px;
+                border-bottom: 1px solid #e9ecef;
+                font-size: 14px;
+                vertical-align: top;
+            }
+            tr:hover {
+                background-color: #f8f9fa;
+            }
+            .rank-badge {
+                display: inline-block;
+                background-color: #e8f0fe;
+                color: #1a73e8;
+                font-weight: bold;
+                padding: 5px 10px;
+                border-radius: 20px;
+                text-align: center;
+            }
+            .score-pill {
+                font-weight: bold;
+                color: #137333;
+                background-color: #ceead6;
+                padding: 4px 8px;
+                border-radius: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>AI Recruiter: Candidate Evaluation & Ranking Report</h2>
+    
+            <div class="job-card">
+                <div class="job-header">📋 <strong>Job Summary & Requirements</strong></div>
+                <div class="job-section">
+                    <p class="summary-text">The role requires leading the company’s fleet maintenance function including ensuring maximum vehicle availability, optimizing maintenance cost, statutory compliance, operational safety, and workshop excellence.</p>
+                </div>
+                <div class="job-grid">
+                    <div class="job-column">
+                        <strong>Required Skills:</strong>
+                        <ul class="job-list"><li>Preventive maintenance</li><li>Predictive maintenance</li><li>Breakdown maintenance</li><li>Workshop management</li><li>Budget preparation</li><li>Vendor management</li><li>Statutory compliance</li><li>Safety initiative implementation</li></ul>
+                    </div>
+                    <div class="job-column">
+                        <strong>Experience & Qualifications:</strong>
+                        <ul class="job-list"><li>Managing maintenance operations for over 200 heavy commercial vehicles</li><li>Exposure to workshop management, preventive maintenance, budgeting, vendor management and statutory compliance</li><li>Experience in multi-location fleet operations</li></ul>
+                    </div>
+                </div>
+            </div>
+
+    
+            <div class="meta-info">
+                <strong>Sorting Order:</strong> Rank (Lowest to Highest) | <strong>Total Candidates Evaluated:</strong> 10
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Rank</th>
+                        <th style="width: 25%;">Candidate Name</th>
+                        <th style="width: 15%;">Match Score</th>
+                        <th style="width: 50%;">Justification</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                          <tr>
+                              <td><span class="rank-badge">#1</span></td>
+                              <td><strong>Nitish Kumar Sinha</strong></td>
+                              <td><span class="score-pill">9 / 10</span></td>
+                              <td>Strong fleet management and vendor skills.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#2</span></td>
+                              <td><strong>Mukesh Kumar Mund</strong></td>
+                              <td><span class="score-pill">8 / 10</span></td>
+                              <td>Extensive logistics and vendor management.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#3</span></td>
+                              <td><strong>Avisekh Kumar</strong></td>
+                              <td><span class="score-pill">7 / 10</span></td>
+                              <td>Supply chain and project management focus.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#4</span></td>
+                              <td><strong>Abhay Nigam</strong></td>
+                              <td><span class="score-pill">6 / 10</span></td>
+                              <td>IT management with budgeting experience.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#5</span></td>
+                              <td><strong>RAHUL GHOSH</strong></td>
+                              <td><span class="score-pill">5 / 10</span></td>
+                              <td>Limited relevant experience in fleet ops.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#6</span></td>
+                              <td><strong>Roshan Kumar Shaw</strong></td>
+                              <td><span class="score-pill">4 / 10</span></td>
+                              <td>Only general procurement skills noted.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#7</span></td>
+                              <td><strong>Preetam Mukhopadhyay</strong></td>
+                              <td><span class="score-pill">3 / 10</span></td>
+                              <td>Lacks relevant skills and experience.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#8</span></td>
+                              <td><strong>Ranjeet Tiwaru</strong></td>
+                              <td><span class="score-pill">2 / 10</span></td>
+                              <td>Quality control focus, not fleet management.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#9</span></td>
+                              <td><strong>SAM RAT MISRA</strong></td>
+                              <td><span class="score-pill">1 / 10</span></td>
+                              <td>No relevant experience for fleet role.</td>
+                          </tr>
+    
+                          <tr>
+                              <td><span class="rank-badge">#10</span></td>
+                              <td><strong>(Surajit Chakraborty)</strong></td>
+                              <td><span class="score-pill">0 / 10</span></td>
+                              <td>No information provided.</td>
+                          </tr>
+    
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    
