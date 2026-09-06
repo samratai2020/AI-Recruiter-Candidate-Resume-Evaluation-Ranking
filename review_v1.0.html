@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>main.py Code Review v1.0</title>
+    <style>
+        :root {
+            --bg: #f6f8fa;
+            --card: #ffffff;
+            --text: #24292f;
+            --muted: #57606a;
+            --border: #d0d7de;
+            --critical: #cf222e;
+            --high: #bc4c00;
+            --medium: #9a6700;
+            --accent: #0969da;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 32px 20px;
+            background: var(--bg);
+            color: var(--text);
+            font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 36px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+        h1 { margin-top: 0; color: var(--accent); }
+        h2 { margin-top: 32px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { margin-bottom: 8px; }
+        .summary {
+            padding: 16px;
+            background: #ddf4ff;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+        }
+        .score { font-size: 1.2rem; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { padding: 12px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+        th { background: #f6f8fa; }
+        .critical { color: var(--critical); font-weight: 700; }
+        .high { color: var(--high); font-weight: 700; }
+        .medium { color: var(--medium); font-weight: 700; }
+        code {
+            padding: 2px 5px;
+            background: #f0f3f6;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+        li { margin: 8px 0; }
+        .footer { color: var(--muted); margin-top: 32px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>main.py Code Review</h1>
+    <p class="score">Overall code quality: 4/10</p>
+    <div class="summary">
+        The intent is clear, but the current file has several execution-blocking bugs and
+        will not reliably process resumes as a normal Python script.
+    </div>
+
+    <h2>Critical bugs</h2>
+    <table>
+        <thead>
+        <tr><th>Priority</th><th>Location</th><th>Problem</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+        <tr><td class="critical">Critical</td><td>Lines 19–20</td><td><code>!pip install ...</code> is notebook syntax.</td><td><code>python main.py ...</code> raises a <code>SyntaxError</code> before execution.</td></tr>
+        <tr><td class="critical">Critical</td><td>Lines 212, 216</td><td><code>tokenizer.decode(...)[0]</code> returns only the first character.</td><td>JSON parsing almost always fails because generated JSON is truncated to one character.</td></tr>
+        <tr><td class="high">High</td><td>Lines 264, 228–271</td><td>The prompt requests a top-level JSON array, but <code>response_format={"type": "json_object"}</code> requires an object.</td><td>OpenAI ranking calls may fail or return an incompatible structure.</td></tr>
+        <tr><td class="high">High</td><td>Lines 300–310</td><td><code>job_info</code> is only assigned when <code>job_details_data</code> is truthy.</td><td>Calling the report function without job details can raise <code>UnboundLocalError</code>.</td></tr>
+        <tr><td class="high">High</td><td>Lines 464–465</td><td>The sorted DataFrame is ignored and the original candidate list is rendered.</td><td>The HTML report may not be sorted by rank.</td></tr>
+        <tr><td class="high">High</td><td>Lines 524, 557–558</td><td>Job-description parsing occurs even when no JD or resumes were found.</td><td><code>found_jd[0]</code> raises <code>IndexError</code>; the model may also be undefined.</td></tr>
+        <tr><td class="high">High</td><td>Lines 510–511</td><td>No command-line argument validation.</td><td>Missing arguments raise an unclear <code>IndexError</code> instead of usage information.</td></tr>
+        <tr><td class="medium">Medium</td><td>Lines 542–549</td><td>PDF detection is case-sensitive.</td><td>Files such as <code>resume.PDF</code> are discovered but never processed.</td></tr>
+        <tr><td class="medium">Medium</td><td>Lines 45–54</td><td>Invalid directory returns one empty list, but the caller expects two values.</td><td>Causes an unpacking error.</td></tr>
+        <tr><td class="medium">Medium</td><td>Lines 84, 96</td><td>PDF/DOCX text is concatenated without separators.</td><td>Words from adjacent pages or paragraphs can be merged.</td></tr>
+        <tr><td class="medium">Medium</td><td>Lines 75–84</td><td><code>page.extract_text()</code> may return <code>None</code>.</td><td>String concatenation can fail on some PDFs.</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Code quality issues</h2>
+    <ul>
+        <li><code>from google.colab import userdata</code> makes the script dependent on Google Colab even though the API key is passed as a command-line argument.</li>
+        <li>Several variables and imports are unused: <code>userdata</code>, <code>combined_payload</code>, <code>lines</code>, <code>cleaned_lines</code>, <code>resume_json_pdf</code>, and <code>resume_json_doc</code>.</li>
+        <li>The code uses inconsistent indentation and naming such as <code>_get_pdf_rawText</code>; it would benefit from PEP 8 formatting and type hints.</li>
+        <li><code>.replace("`", "").replace("json", "")</code> is unsafe JSON cleanup and can corrupt legitimate text. Use strict JSON parsing or safely extract a fenced JSON block.</li>
+        <li><code>except Exception</code> in the OpenAI call hides all failure types and returns <code>None</code>, making diagnosis difficult.</li>
+        <li>Only the first file beginning with <code>JD</code> is used; multiple job descriptions are silently ignored.</li>
+        <li>DOCX extraction reads paragraphs only, not tables, headers, or footers, where resume data is frequently stored.</li>
+    </ul>
+
+    <h2>Performance concerns</h2>
+    <ol>
+        <li>Inference runs sequentially for every resume with up to <code>max_new_tokens=1000</code>, which is slow for larger directories.</li>
+        <li><code>torch.inference_mode()</code> is not used during Qwen generation.</li>
+        <li>The full set of extracted resumes is sent in one OpenAI request, which can exceed the context window, increase cost, and increase latency.</li>
+        <li>PDF text uses repeated string concatenation; collect page text in a list and use <code>"\n".join(...)</code>.</li>
+        <li>Pandas is unnecessary for the small transformation used in report generation and adds an avoidable dependency.</li>
+        <li>HTML is built through repeated string concatenation; use a list of fragments followed by <code>"".join(...)</code>.</li>
+    </ol>
+
+    <h2>Most important fixes</h2>
+    <pre><code>generated_text = tokenizer.decode(
+    generated_tokens[0],
+    skip_special_tokens=True,
+).strip()
+return generated_text</code></pre>
+    <p>
+        Replace notebook-only install lines with a <code>requirements.txt</code> file and install
+        dependencies outside the script. Add CLI validation, initialize <code>job_info = {}</code>,
+        guard no-file cases, use case-insensitive suffix checks, and generate the report from the
+        sorted DataFrame rather than the original list.
+    </p>
+    <p>
+        Escape all LLM-derived values before placing them into HTML with
+        <code>html.escape(...)</code>; otherwise resume or model output can inject arbitrary
+        HTML/JavaScript into the report.
+    </p>
+
+    <p class="footer">Review generated for <code>main.py</code> · Review version 1.0</p>
+</main>
+</body>
+</html>
